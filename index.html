@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kabadiwala Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Kabadiwala Dashboard</h1>
+    <p>Scrap bought, weighed and paid for, with the numbers worked out for you.</p>
+  </header>
+
+  <main class="layout">
+    <!-- Weigh slip: the entry form (Create / Update) -->
+    <aside class="slip" aria-labelledby="slipTitle">
+      <h2 id="slipTitle">New weigh slip</h2>
+      <form id="entryForm" novalidate>
+        <label for="seller">Seller name</label>
+        <input id="seller" name="seller_name" type="text" maxlength="50" autocomplete="off">
+        <small class="err" data-for="seller_name"></small>
+
+        <label for="material">Material</label>
+        <select id="material" name="material">
+          <option value="">Choose material</option>
+          <option>Paper</option><option>Plastic</option><option>Metal</option><option>Glass</option>
+        </select>
+        <small class="err" data-for="material"></small>
+
+        <div class="pair">
+          <div>
+            <label for="weight">Weight (kg)</label>
+            <input id="weight" name="weight_kg" type="number" step="0.01" min="0" inputmode="decimal">
+            <small class="err" data-for="weight_kg"></small>
+          </div>
+          <div>
+            <label for="rate">Rate per kg (₹)</label>
+            <input id="rate" name="rate_per_kg" type="number" step="0.01" min="0" inputmode="decimal">
+            <small class="err" data-for="rate_per_kg"></small>
+          </div>
+        </div>
+
+        <label for="date">Date</label>
+        <input id="date" name="entry_date" type="date">
+        <small class="err" data-for="entry_date"></small>
+
+        <div class="total">
+          <span>Amount to pay</span>
+          <strong id="total">₹0</strong>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="saveBtn" class="primary">Add entry</button>
+          <button type="button" id="cancelBtn" class="ghost" hidden>Cancel edit</button>
+        </div>
+      </form>
+    </aside>
+
+    <section class="board">
+      <div class="kpis" id="kpis"></div>
+
+      <div class="grid">
+        <article class="panel"><h3>Weight by material (kg)</h3><div class="chart"><canvas id="weightChart"></canvas></div></article>
+        <article class="panel"><h3>Amount paid by material (₹)</h3><div class="chart"><canvas id="amountChart"></canvas></div></article>
+        <article class="panel wide"><h3>Daily spend, last 14 days with entries (₹)</h3><div class="chart short"><canvas id="trendChart"></canvas></div></article>
+      </div>
+
+      <article class="panel">
+        <h3>What the data says</h3>
+        <ul id="insights" class="insights"></ul>
+      </article>
+
+      <article class="panel">
+        <h3>Total weight per material</h3>
+        <div class="scroll">
+          <table id="summaryTable">
+            <thead><tr><th>Material</th><th class="num">Entries</th><th class="num">Weight (kg)</th><th class="num">Amount (₹)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="tools">
+          <h3>All entries</h3>
+          <input id="search" type="search" placeholder="Search seller name" aria-label="Search seller name">
+          <select id="filter" aria-label="Filter by material">
+            <option value="">All materials</option>
+            <option>Paper</option><option>Plastic</option><option>Metal</option><option>Glass</option>
+          </select>
+        </div>
+        <div class="scroll">
+          <table id="entriesTable">
+            <thead><tr><th>ID</th><th>Seller</th><th>Material</th><th class="num">Weight (kg)</th><th class="num">Rate</th><th>Date</th><th class="num">Total (₹)</th><th><span class="sr">Actions</span></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
